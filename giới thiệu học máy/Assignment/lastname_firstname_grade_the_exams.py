@@ -42,7 +42,8 @@ class lastname_firstname_grade_the_exams:
             print("Không tìm thấy file.")
         return 
     
-    
+
+
     def ExistFile(self, nameFile):
         '''
         kiểm tra xem file đó có tồn tại trong thư mục hay không
@@ -82,6 +83,11 @@ class lastname_firstname_grade_the_exams:
     def IsValidate(self, rowOfdataFrame, dataFrame):
         '''
         Kiểm tra tính họp lệ của dữ liệu
+        
+        Phân tích từng dòng và đảm bảo rằng nó là "hợp lệ".
+        Một dòng hợp lệ chứa danh sách 26 giá trị được phân tách bằng dấu phẩy
+        N# cho một học sinh là mục đầu tiên trên dòng. Nó phải chứa ký tự “N” theo sau là 8 ký tự số.
+        
         '''
         lstDataRow = dataFrame.iloc[rowOfdataFrame].tolist();
        
@@ -119,6 +125,11 @@ class lastname_firstname_grade_the_exams:
     def Scores(self,lstAnswers): 
         '''
         Tính điểm của của 1 bài đã lọp tương ứng với mã sinh viên
+        
+        +4 điểm cho mỗi câu trả lời đúng
+        0 điểm cho mỗi câu trả lời bị bỏ qua
+        -1 điểm cho mỗi câu trả lời sai
+        
         '''
         score = 0
         for index in range(1, len(lstAnswers)):
@@ -161,10 +172,16 @@ class lastname_firstname_grade_the_exams:
         print("Điểm trung bình: " + str(average))
         print("Miền giá trị của điểm: " +  str(max - min))
         
+        # =============================================================================
+        #   Giá trị trung vị (Sắp xếp các điểm theo thứ tự tăng dần. Nếu # học sinh là số lẻ, 
+        #   bạn có thể lấy giá trị nằm ở giữa của tất cả các điểm (tức là [0, 50, 100] — trung vị là 50). 
+        #   Nếu # học sinh là chẵn bạn có thể tính giá trị trung vị bằng cách lấy giá trị trung bình của hai giá trị giữa
+        #   (tức là [0, 50, 60, 100] — giá trị trung vị là 55)).
+        # =============================================================================
+        
         list_values = list(dict(sorted(self.scores_answer.items(), key=lambda item: item[1])).values())
         index = int(len(self.scores_answer) / 2)
         if len(self.scores_answer) % 2 == 0:
-            
             print("Giá trị trung vị: " +  str(round(( float(list_values[index]) + float(list_values[index + 1]))/2)))
         else:
             print("Giá trị trung vị: " +  str( list_values[index + 1]))
